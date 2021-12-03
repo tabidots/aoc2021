@@ -30,7 +30,7 @@ forward 2"))
 
 (defn part-2 [data {aim :aim depth :depth horiz :horiz :as status}]
   (if-not data (* depth horiz)
-    (let [[this & those]    data
+    (let [[this & those]  data
           [_ direction u] (re-find #"(\w+) (\d)" this)
           unit            (read-string u)]
       (case direction
