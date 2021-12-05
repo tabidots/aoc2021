@@ -27,7 +27,8 @@
     [ 2  0 12  3  7]]])
 
 (def sample-init-state
-  {:called   '()
+  {:called   '() ;; These are lists so that "conj" prepends rather than appends
+   :winners  '()
    :uncalled sample-calls
    :boards   sample-boards})
 
@@ -50,6 +51,7 @@
                        (partition 5)
                        (mapv parse-board))]
     {:called   '()
+     :winners  '()
      :uncalled (map read-string raw-calls)
      :boards   boards}))
 
@@ -61,6 +63,7 @@
   (apply mapv vector board))
 
 (defn has-bingo?
+  "Returns true if a board has a row or column bingo."
   [called board]
   (let [called-set (set called)]
     ;; All numbers of some row in a given board have been called
@@ -73,38 +76,31 @@
 ;; Implement the gameplay mechanism
 
 (defn score
-  ([called board]
-   (score called board (first called)))
-  ([called board recent-call]
-   (let [sum-unmarked (->> board
-                           (reduce into [])
-                           (remove (set called))
-                           (apply +))]
-     (* sum-unmarked recent-call))))
+  "Scores a winning bingo board (when used on the turn where it wins)."
+  [called board]
+  (let [sum-unmarked (->> board
+                          (reduce into [])
+                          (remove (set called))
+                          (apply +))]
+    (* sum-unmarked (first called))))
 
 (defn play-bingo
-  [{called :called uncalled :uncalled boards :boards :as state}]
-  (if-some [winner (first (filter (partial has-bingo? called) boards))]
-    (score called winner)
-    (recur (-> state
-               (update :called conj (first uncalled)) ;; conj prepends, not appends, here
-               (update :uncalled rest)))))
+  [{:keys [called uncalled boards winners] :as state} &
+   {:keys [last-winner] :or {last-winner false} :as mode}]
+  (cond
+    (and (not last-winner) (not-empty winners)) (first winners)  ;; Part 1
+    (and last-winner (empty? boards))           (first winners)  ;; Part 2
+    :else (let [new-winner (first (filter (partial has-bingo? called) boards))
+                remaining  (remove (partial has-bingo? called) boards)]
+            (recur (cond-> state
+                     new-winner (update :winners  conj (score called new-winner))
+                     :always    (update :called   conj (first uncalled))
+                     :always    (update :uncalled rest)
+                     :always    (assoc  :boards   remaining))
+                   mode))))
 
 (defn part-1 []
   (play-bingo init-state))
 
-(defn find-last-winning-board
-  [{called :called uncalled :uncalled boards :boards winners :winners
-    :or {winners '()}
-    :as state}]
-  (if (empty? boards) (first winners)
-    (let [new-winner (first (filter (partial has-bingo? called) boards))
-          remaining  (remove (partial has-bingo? called) boards)]
-      (recur (cond-> state
-               new-winner (update :winners  conj (score called new-winner (first called)))
-               :always    (update :called   conj (first uncalled))
-               :always    (update :uncalled rest)
-               :always    (assoc  :boards   remaining))))))
-
 (defn part-2 []
-  (find-last-winning-board init-state))
+  (play-bingo init-state :last-winner true))
