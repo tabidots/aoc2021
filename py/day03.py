@@ -14,7 +14,7 @@ def most_least_common_bit_at(data, index):
     res = ""
     c = Counter()
     for entry in data:
-        c += Counter({entry[index]: 1})
+        c.update({entry[index]: 1})
     return (max(c, key=c.get), min(c, key=c.get))
 
 def part_1(data):

@@ -31,7 +31,7 @@ def total_dynamic_costs(data):
 def part_2(data):
     return min(total_dynamic_costs(data))
 
-print("Day X\n"
+print("Day 7\n"
       "[Part 1] Example: %d, Puzzle: %d\n"
       "[Part 2] Example: %d, Puzzle: %d"
       %(part_1(sample_input), part_1(puzzle_input),
