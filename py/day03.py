@@ -11,7 +11,6 @@ sample_input = parse('../resources/day03_ex.txt')
 puzzle_input = parse('../resources/day03.txt')
 
 def most_least_common_bit_at(data, index):
-    res = ""
     c = Counter()
     for entry in data:
         c.update({entry[index]: 1})

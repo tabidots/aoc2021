@@ -7,10 +7,10 @@
   [data]
   (for [line data]
     (let [[signal-patterns output-values] (s/split line #" \| ")]
-      {:signal-patterns (->> (s/split signal-patterns #" ")
-                             (map (comp set s/join sort)))
-       :output-values   (->> (s/split output-values #" ")
-                             (map (comp set s/join sort)))})))
+      {:signal-patterns (map (comp set s/join sort)
+                             (s/split signal-patterns #" "))
+       :output-values   (map (comp set s/join sort)
+                             (s/split output-values #" "))})))
 
 (def small-sample-input
   (-> "../resources/day08_ex_small.txt" io/resource io/reader line-seq parse))
