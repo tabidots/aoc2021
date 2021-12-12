@@ -9,9 +9,9 @@ sample_input = parse('../resources/day11_ex.txt')
 puzzle_input = parse('../resources/day11.txt')
 
 def neighbors(y, x):
-    return [(y-1, x-1), (y-1, x), (y-1,x+1),
-            (y  , x-1),           (y  ,x+1),
-            (y+1, x-1), (y+1, x), (y+1,x+1)]
+    return [(y-1, x-1), (y-1, x), (y-1, x+1),
+            (y  , x-1),           (y  , x+1),
+            (y+1, x-1), (y+1, x), (y+1, x+1)]
 
 def step(state):
     grid, flashes = state['grid'], state['flashes']
