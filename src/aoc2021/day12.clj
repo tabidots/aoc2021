@@ -4,7 +4,7 @@
 (defn parse
   [data]
   (reduce (fn [res line]
-            (let [[_ head tail] (map keyword (re-find #"(\w+)\-(\w+)" line))]
+            (let [[head tail] (map keyword (re-seq #"\w+" line))]
               (-> res
                 (update head (fnil conj []) tail)
                 (update tail (fnil conj []) head))))
@@ -13,10 +13,8 @@
 (defn trim
   [data]
   (reduce-kv (fn [res node neighbors]
-               (cond
-                 (get (set neighbors) "start") (assoc res node (remove #{"start"} neighbors))
-                 (= node "end") res
-                 :else (assoc res node neighbors)))
+               (if (= node :end) res
+                 (assoc res node (remove #{:start} neighbors))))
              {} data))
 
 (def sample-1 (-> "../resources/day12_ex1.txt" io/resource io/reader line-seq parse trim))
@@ -34,10 +32,9 @@
                                         (apply distinct? visited-small-caves)))
           choices
           (cond->> (get system (last path))
-               :always                    (remove #{:start})
-               (not single-twice?)        (remove (set visited-small-caves))
-               (and single-twice?
-                    small-visited-twice?) (remove (set visited-small-caves)))]
+             (not single-twice?)        (remove (set visited-small-caves))
+             (and single-twice?
+                  small-visited-twice?) (remove (set visited-small-caves)))]
 
       (map (partial conj path) choices))))
 
@@ -50,22 +47,11 @@
                     (vswap! seen conj v)))
                 coll)))
 
-(defn part-1
-  [system]
+(defn solve
+  [system & {:keys [single-twice?] :or {single-twice? false}}]
   (->> [[:start]]
        (iterate (fn [paths]
-                  (mapcat #(make-path system %)
-                          paths)))
-       take-while-distinct
-       last
-       (filter #(= (last %) :end))
-       count))
-
-(defn part-2
-  [system]
-  (->> [[:start]]
-       (iterate (fn [paths]
-                  (mapcat #(make-path system % :single-twice? true)
+                  (mapcat #(make-path system % :single-twice? single-twice?)
                           paths)))
        take-while-distinct
        last
