@@ -29,7 +29,6 @@
                  (assoc m k (inc v)))
                {} grid)))
 
-
 (defn trigger-flashes
   [{:keys [grid] :as state}]
   (if-some [to-flash (first (filter #(> (val %) 9) grid))]
@@ -47,8 +46,7 @@
 (defn reset-energy
   [{:keys [grid] :as state}]
   (let [grid' (reduce-kv (fn [m k v]
-                           (if (<= 0 v 9) (assoc m k v)
-                             (assoc m k 0)))
+                           (assoc m k (max 0 v)))
                          {} grid)]
     (-> state
         (assoc :grid grid')
@@ -69,5 +67,3 @@
        (drop-while #(not-every? zero? (vals (:grid %))))
        first
        :step))
-
-(part-2 puzzle-input)

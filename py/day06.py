@@ -24,23 +24,14 @@ def elapse(fish):
             c_new.update({timer - 1: num_fish})
     return c_new
 
-def iterate(f, n):
-    """Works like Clojure (iterate f x)."""
-    # https://codereview.stackexchange.com/questions/80524/functional-programming-approach-to-repeated-function-application
-    if n == 1:
-        return f
-    return lambda x: f(iterate(f, n-1)(x))
-
-def part_1(data):
-    fish = iterate(elapse, 80)(parse(data))
-    return sum(fish.values())
-
-def part_2(data):
-    fish = iterate(elapse, 256)(parse(data))
+def solve(data, iters):
+    fish = parse(data)
+    for i in range(iters):
+        fish = elapse(fish)
     return sum(fish.values())
 
 print("Day 6\n"
       "[Part 1] Example: %d, Puzzle: %d\n"
       "[Part 2] Example: %d, Puzzle: %d"
-      %(part_1(sample_input), part_1(puzzle_input),
-        part_2(sample_input), part_2(puzzle_input)))
+      %(solve(sample_input, 80), solve(puzzle_input, 80),
+        solve(sample_input, 256), solve(puzzle_input, 256)))
