@@ -41,8 +41,8 @@
       (newline)
       (dotimes [x (inc (apply max xs))]
         (if (get grid [x y])
-           (print \#)
-           (print \ ))))))
+          (print \#)
+          (print \ ))))))
 
 (defn part-2
   [data]
