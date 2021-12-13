@@ -10,36 +10,29 @@ def parse(path):
 sample_input = parse('../resources/day02_ex.txt')
 puzzle_input = parse('../resources/day02.txt')
 
-def part_1(data):
+def solve(data, aim=None):
     horiz = 0
     depth = 0
     for command, unit in data:
         x = int(unit)
         if command == 'forward':
-            horiz += x
+            horiz += x            # Part 1
+            if aim is not None:   # Part 2
+                depth += aim * x
         elif command == 'down':
-            depth += x
+            if aim is None:       # Part 1
+                depth += x
+            else:                 # Part 2
+                aim += x
         else:
-            depth -= x
-    return horiz * depth
-
-def part_2(data):
-    horiz = 0
-    depth = 0
-    aim = 0
-    for command, unit in data:
-        x = int(unit)
-        if command == 'forward':
-            horiz += x
-            depth += aim * x
-        elif command == 'down':
-            aim += x
-        else:
-            aim -= x
+            if aim is None:       # Part 1
+                depth -= x
+            else:                 # Part 2
+                aim -= x
     return horiz * depth
 
 print("Day 2\n"
       "[Part 1] Example: %d, Puzzle: %d\n"
       "[Part 2] Example: %d, Puzzle: %d"
-      %(part_1(sample_input), part_1(puzzle_input),
-        part_2(sample_input), part_2(puzzle_input)))
+      %(solve(sample_input), solve(puzzle_input),
+        solve(sample_input,aim=0), solve(puzzle_input,aim=0)))

@@ -13,21 +13,13 @@ def part_1(data):
             winners += 1
     return winners
 
-def sum_partitions(lst, chunk_size, step=-1):
-    start = 0
-    end = chunk_size
-    sums = []
-    if step == -1:
-        step = chunk_size
-    while start <= len(lst):
-        if len(lst[start:end]) < chunk_size:
-            return sums
-        sums.append(sum(lst[start:end]))
-        start += step
-        end = start + chunk_size
-
 def part_2(data):
-    return part_1(sum_partitions(data, 3, 1))
+    winners = 0
+    for i, _ in enumerate(data):
+        if i + 3 == len(data):
+            return winners
+        if sum(data[i+1:i+4]) > sum(data[i:i+3]):
+            winners += 1
 
 print("Day 1\n"
       "[Part 1] Example: %d, Puzzle: %d\n"
