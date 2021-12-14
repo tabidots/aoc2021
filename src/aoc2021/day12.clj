@@ -5,22 +5,17 @@
   [data]
   (reduce (fn [res line]
             (let [[head tail] (map keyword (re-seq #"\w+" line))]
-              (-> res
+              (cond-> res
+                (and (not (= head :end)) (not (= tail :start)))
                 (update head (fnil conj []) tail)
+                (and (not (= tail :end)) (not (= head :start)))
                 (update tail (fnil conj []) head))))
           {} data))
 
-(defn trim
-  [data]
-  (reduce-kv (fn [res node neighbors]
-               (if (= node :end) res
-                 (assoc res node (remove #{:start} neighbors))))
-             {} data))
-
-(def sample-1 (-> "../resources/day12_ex1.txt" io/resource io/reader line-seq parse trim))
-(def sample-2 (-> "../resources/day12_ex2.txt" io/resource io/reader line-seq parse trim))
-(def sample-3 (-> "../resources/day12_ex3.txt" io/resource io/reader line-seq parse trim))
-(def puzzle-input (-> "../resources/day12.txt" io/resource io/reader line-seq parse trim))
+(def sample-1 (-> "../resources/day12_ex1.txt" io/resource io/reader line-seq parse))
+(def sample-2 (-> "../resources/day12_ex2.txt" io/resource io/reader line-seq parse))
+(def sample-3 (-> "../resources/day12_ex3.txt" io/resource io/reader line-seq parse))
+(def puzzle-input (-> "../resources/day12.txt" io/resource io/reader line-seq parse))
 
 (defn small-cave? [c] (re-find #"^[a-z]{1,2}$" (name c)))
 
@@ -57,3 +52,5 @@
        last
        (filter #(= (last %) :end))
        count))
+
+(solve puzzle-input)

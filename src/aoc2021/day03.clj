@@ -1,20 +1,8 @@
 (ns aoc2021.day03
-  (:require [clojure.java.io :as io]
-            [clojure.string :as s]))
-
+  (:require [clojure.java.io :as io]))
+  
 (def sample-input
-  (s/split-lines "00100
-11110
-10110
-10111
-10101
-01111
-00111
-11100
-10000
-11001
-00010
-01010"))
+  (-> "../resources/day03_ex.txt" io/resource io/reader line-seq))
 
 (def puzzle-input
   (-> "../resources/day03.txt" io/resource io/reader line-seq))

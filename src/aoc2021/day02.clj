@@ -1,43 +1,34 @@
 (ns aoc2021.day02
-  (:require [clojure.java.io :as io]
-            [clojure.string :as s]))
+  (:require [clojure.java.io :as io]))
 
 (def sample-input
-  (s/split-lines "forward 5
-down 5
-forward 8
-up 3
-down 8
-forward 2"))
+  (-> "../resources/day02_ex.txt" io/resource io/reader line-seq))
 
 (def puzzle-input
   (-> "../resources/day02.txt" io/resource io/reader line-seq))
 
-(defn get-units [s]
-  (read-string (re-find #"\d" s)))
+(defn add-all-units
+  [data direction]
+  (let [patt (re-pattern (str direction " (\\d+)"))]
+    (->> (keep #(second (re-find patt %)) data)
+         (map read-string)
+         (apply +))))
 
-(defn add-all-units [data direction]
-  (->> (filter #(s/starts-with? % direction) data)
-       (map get-units)
-       (apply +)))
+(defn part-1
+  [data]
+  (let [[horiz up down] (map (partial add-all-units data) ["forward" "up" "down"])]
+    (* horiz (- down up))))
 
-(defn part-1 [data]
-  (let [horiz (add-all-units data "forward")
-        up    (add-all-units data "up")
-        down  (add-all-units data "down")
-        depth (- down up)]
-    (* horiz depth)))
-
-(defn part-2 [data {aim :aim depth :depth horiz :horiz :as status}]
+(defn part-2
+  [data & {:keys [aim depth horiz] :or {aim 0 depth 0 horiz 0} :as status}]
   (if-not data (* depth horiz)
     (let [[this & those]  data
           [_ direction u] (re-find #"(\w+) (\d)" this)
-          unit            (read-string u)]
-      (case direction
-        "up"      (recur those (update status :aim - unit))
-        "down"    (recur those (update status :aim + unit))
-        "forward" (recur those (-> status
-                                   (update :horiz + unit)
-                                   (update :depth + (* aim unit))))))))
-
-(part-2 puzzle-input {:aim 0 :depth 0 :horiz 0})
+          unit            (read-string u)
+          new-status      (case direction
+                            "up"      (update status :aim (fnil - 0) unit)
+                            "down"    (update status :aim (fnil + 0) unit)
+                            "forward" (-> status
+                                          (update :horiz (fnil + 0) unit)
+                                          (update :depth (fnil + 0) (* aim unit))))]
+      (recur those new-status))))

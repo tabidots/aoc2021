@@ -1,18 +1,11 @@
 (ns aoc2021.day05
-  (:require [clojure.java.io :as io]
-            [clojure.string :as s]))
+  (:require [clojure.java.io :as io]))
 
 (def sample-input
-  (s/split-lines "0,9 -> 5,9
-8,0 -> 0,8
-9,4 -> 3,4
-2,2 -> 2,1
-7,0 -> 7,4
-6,4 -> 2,0
-0,9 -> 2,9
-3,4 -> 1,4
-0,0 -> 8,8
-5,5 -> 8,2"))
+  (-> "../resources/day05_ex.txt" io/resource io/reader line-seq))
+
+(def puzzle-input
+  (-> "../resources/day05.txt" io/resource io/reader line-seq))
 
 (defn bidirectional-range
   "Returns an inclusive range between two numbers in the order they are given."
@@ -40,9 +33,6 @@
          (frequencies)
          (remove #(= (val %) 1))
          count)))
-
-(def puzzle-input
-  (-> "../resources/day05.txt" io/resource io/reader line-seq))
 
 (defn part-1 [] (find-overlaps puzzle-input))
 

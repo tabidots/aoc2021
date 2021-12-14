@@ -12,9 +12,6 @@
        :output-values   (map (comp set s/join sort)
                              (s/split output-values #" "))})))
 
-(def small-sample-input
-  (-> "../resources/day08_ex_small.txt" io/resource io/reader line-seq parse))
-
 (def sample-input
   (-> "../resources/day08_ex.txt" io/resource io/reader line-seq parse))
 

@@ -35,7 +35,7 @@ def display(grid):
     width = max([x for x, y in grid])
     height = max([y for x, y in grid])
     for y in range(height + 1):
-        print(".".join(["#" if (x, y) in grid else " " for x in range(width + 1)]))
+        print("".join(["##" if (x, y) in grid else "  " for x in range(width + 1)]))
 
 def part_1(data):
     return len(set(fold(data['grid'], **data['folds'][0])))
