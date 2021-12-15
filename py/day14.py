@@ -5,7 +5,7 @@ import re
 from collections import Counter
 
 def parse(path):
-    result = {'polymer': Counter(), 'last_char': "", 'pairs': [], 'repls': []}
+    result = {'polymer': Counter(), 'pairs': [], 'repls': []}
     with open(path) as f:
         for line in f:
             line = line.strip()
@@ -14,15 +14,14 @@ def parse(path):
                 result['pairs'].append(a + c)
                 result['repls'].append((a + b, b + c))
             elif re.match(r"\w+", line):
-                result['last_char'] = line[-1]
-                for i in range(len(line) - 1):
+                for i in range(len(line)):
                     result['polymer'].update({line[i:i+2]: 1})
     return result
 
 sample_input = parse('../resources/day14_ex.txt')
 puzzle_input = parse('../resources/day14.txt')
 
-def step(polymer, last_char, pairs, repls):
+def step(polymer, pairs, repls):
     result = Counter()
     for pair, count in polymer.items():
         if pair in pairs:
@@ -31,7 +30,7 @@ def step(polymer, last_char, pairs, repls):
             result.update({repl[0]: count, repl[1]: count})
         else:
             result.update({pair: count})
-    return {'polymer': result, 'last_char': last_char, 'pairs': pairs, 'repls': repls}
+    return {'polymer': result, 'pairs': pairs, 'repls': repls}
 
 def solve(data, steps):
     result = data
@@ -40,7 +39,6 @@ def solve(data, steps):
     letters = Counter()
     for pair, count in result['polymer'].items():
         letters.update({pair[0]: count})
-    letters.update({data['last_char']: 1})
     counts = letters.values()
     return max(counts) - min(counts)
 
