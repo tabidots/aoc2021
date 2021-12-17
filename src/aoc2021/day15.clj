@@ -19,10 +19,7 @@
   (let [goal         [(dec (count m)) (dec (count (first m)))]
         neighbors-fn (fn [[y x]]
                        (filter #(pos? (get-in m % -1))
-                               [[(dec y) x]           ;; above
-                                [(inc y) x]           ;; below
-                                [y (inc x)]           ;; right
-                                [y (dec x)]]))
+                               [[(dec y) x] [(inc y) x] [y (inc x)] [y (dec x)]]))
         lower-cost   (fn [old new] (if (< new old) new old))]
     (loop [stack      (priority-map-keyfn identity [0 0] 0)
            closed-set {}]
@@ -33,7 +30,7 @@
                                       :when (not (contains? closed-set neighbor))]
                                   {neighbor (+ cost (get-in m neighbor))}))]
             (recur (merge-with lower-cost (pop stack) neighbors)
-              (conj closed-set current))))))))
+              (into (conj closed-set current) neighbors))))))))
 
 (defn expand
   [m]
@@ -52,4 +49,4 @@
          vec)))
 
 ; (solve puzzle-input)
-; (solve (expand puzzle-input)))
+; (solve (expand puzzle-input))
