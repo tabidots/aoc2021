@@ -107,8 +107,4 @@
 
 (defn part-2
   [homework]
-  (apply max
-    (for [[a b] (combo/permuted-combinations homework 2)]
-      (->> (snail-add a b)
-           first
-           (w/postwalk magnitude)))))
+  (apply max (map part-1 (combo/permuted-combinations homework 2))))
