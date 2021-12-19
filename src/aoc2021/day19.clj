@@ -14,6 +14,8 @@
        (mapcat rotations)))
 
 (defn orientations
+  "Given a seq of beacon coordinates, returns 24 seqs corresponding to the coordinates
+  of the same beacons under a different orientation + rotation of the scanner."
   [beacons]
   (->> (map orientations-single beacons) ;; each row is a beacon, each column is an orientation
        (apply mapv vector)))             ;; each row is an orientation, each column is a beacon
@@ -46,8 +48,10 @@
   (map (fn [[x y z]] [(+ x dx) (+ y dy) (+ z dz)]) beacons))
 
 (defn reorient
-  "Finds position of target scanner relative to reference scanner."
-  [reference target]  ;; both should be scanners
+  "Finds the position of the target scanner relative to a reference scanner.
+  and returns the position and the scanner's beacons translated to that position.
+  Returns nil if the two scanners do not share any beacons."
+  [reference target]
   (first
     (for [reference-beacon  (:beacons reference)
           candidate-beacons (orientations (:beacons target))
@@ -77,10 +81,8 @@
 
 (defn solve
   [scanners]
-  (let [used     (set (filter-keys :used scanners))
-        knowns   (remove used (filter-keys :position scanners))
-        unknowns (remove-keys :position scanners)]
-    (println knowns)
+  (let [[knowns unknowns] ((juxt filter-keys remove-keys) :position scanners)]
+    (println knowns unknowns)
     (cond
       (empty? knowns)   (recur (assoc-in scanners [0 :position] [0 0 0]))
       (empty? unknowns) ((juxt part-1 part-2) scanners)
@@ -88,6 +90,7 @@
       (recur (apply merge scanners
                (for [k knowns
                      u unknowns
+                     :when (not (:used (scanners k)))
                      :let [new-scanner (reorient (scanners k) (scanners u))]
                      :when new-scanner]
                  {k (assoc (scanners k) :used true)
