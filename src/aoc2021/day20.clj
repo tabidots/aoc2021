@@ -26,9 +26,9 @@
   (Integer/parseInt x 2))
 
 (defn index
-  [image [y x] default-val]
+  [image [y x] dummy]
   (->> (square [y x])
-       (map #(get-in image % default-val))
+       (map #(get-in image % dummy))
        (apply str)
        bin->dec))
 
@@ -36,8 +36,8 @@
   [{:keys [algo image times-enhanced] :as state}]
   ;; Tricky! If the first bit in the algo is 1, then all of the "empty" spaces
   ;; in the infinite region outside the image become 1 upon every other enhancement.
-  (let [default-val (if (zero? (first algo)) 0
-                      (mod times-enhanced 2))]
+  (let [dummy (if (zero? (first algo)) 0
+                (mod times-enhanced 2))]
     (-> state
         (update :times-enhanced inc)
         (assoc :image
@@ -45,7 +45,7 @@
                 width  (count (first image))]
             (vec (for [y (range -1 (inc height))]
                    (vec (for [x (range -1 (inc width))]
-                          (nth algo (index image [y x] default-val)))))))))))
+                          (nth algo (index image [y x] dummy)))))))))))
 
 (defn solve
   [{:keys [times-enhanced image] :as data} iterations]
