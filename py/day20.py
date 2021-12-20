@@ -37,7 +37,7 @@ def solve(iterations, algo, image):
                                                       for y in range(-1, height+1)]
     return sum([sum([1 if x == 1 else 0 for x in row]) for row in image])
 
-print("Day 15\n"
+print("Day 20\n"
       "[Part 1] Example: %d, Puzzle: %d\n"
       "[Part 2] Example: %d, Puzzle: %d"
       %(solve(2, **sample_input), solve(2, **puzzle_input),
