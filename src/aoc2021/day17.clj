@@ -48,8 +48,8 @@
 
 (defn solve
   [{:keys [right bottom] :as target}]
-  ((juxt #(:max-y (apply max-key :max-y %))
-         count)
+  ((juxt #(:max-y (apply max-key :max-y %)) ;; Part 1
+         count)                             ;; Part 2
    (for [xv (range 1 (inc right))
          yv (range bottom (inc (- bottom)))
          :let [result (fire-probe target xv yv)]
