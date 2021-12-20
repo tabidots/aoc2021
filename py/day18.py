@@ -67,36 +67,24 @@ def snailfish_reduce(num):
 
 
 class Node:
-    def __init__(self, this, parent, left, right):
-        self.this = this
-        self.parent = parent
-        self.magnitude = None
-        self.children = []
-        self.left = left    # neighbor
-        self.right = right  # neighbor
+    def __init__(self, this, parent):
+        self.parent    = parent
+        self.magnitude = this if isinstance(this, int) else None
+        self.children  = []
         if isinstance(this, list):
             for i, child in enumerate(this):
-                if i > 0:
-                    self.left = this[i-1]
-                if child != this[-1]:
-                    self.right = this[i+1]
-                self.children.append(Node(child, self, left, right))
-        elif isinstance(this, int):
-            self.magnitude = this
+                self.children.append(Node(child, self))
 
     def is_pair(self):
         return True if self.children and len(self.children) == 2 and \
                        all([c.magnitude is not None for c in self.children]) else False
-
-    def __repr__(self):
-        return repr(self.this)
 
 def get_magnitude(left, right):
     return 3 * left + 2 * right
 
 def part_1(homework):
     solution = reduce(lambda a,b: snailfish_add(a, b), homework)
-    tree = Node(eval(solution), None, None, None)
+    tree = Node(eval(solution), None)
     node = tree
     while not tree.magnitude:
         if node.is_pair():
