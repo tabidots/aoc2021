@@ -16,7 +16,7 @@
 
 (def board [10 1 2 3 4 5 6 7 8 9 10])
 
-(defn take-turn
+(defn advance
   [{:keys [position] :as player} distance]
   (let [destination (->> (mod (+ position distance) 10)
                          (nth board))]
@@ -45,7 +45,7 @@
           (-> state
               (assoc-in  [:die :current] (-> (last rolls) inc (mod 100)))
               (update-in [:die :times-rolled] + 3)
-              (update-in [:players turn] take-turn (apply + rolls))))))))
+              (update-in [:players turn] advance (apply + rolls))))))))
 
 ;; Part 2
 
@@ -60,20 +60,19 @@
     (for [a [1 2 3] b [1 2 3] c [1 2 3]]
       (+ a b c))))
 
-(defn dirac-turn
-  [universes whose-turn]
+(defn take-turn
+  [universes current-player]
   (apply merge-with +
     (for [[universe current-count] universes
           [total-roll multiplier]  roll-freqs
-          :when (nil? (:winner universe)) ; This stops the propagation of games with a winner
+          :when (nil? (:winner universe)) ; Don't propagate games with a winner
           :let [{new-pos :position
-                 new-score :score} (take-turn (universe whose-turn) total-roll)
-                winner             (when (>= new-score 21)
-                                     whose-turn)]]
+                 new-score :score} (advance (universe current-player) total-roll)
+                winner             (when (>= new-score 21) current-player)]]
       {(-> universe
            (assoc :winner winner)
-           (assoc-in [whose-turn :position] new-pos)
-           (assoc-in [whose-turn :score] new-score))
+           (assoc-in [current-player :position] new-pos)
+           (assoc-in [current-player :score] new-score))
        (* current-count multiplier)})))
 
 (defn tally-wins
@@ -85,14 +84,13 @@
 
 (defn part-2
   [{:keys [universes wins turns-taken] :as state}]
-  (if (empty? universes)
-    (val (apply max-key val wins))
+  (if (empty? universes) (val (apply max-key val wins))
     (recur
-      (let [whose-turn ({0 1, 1 2} (mod turns-taken 2))]
+      (let [current-player ({0 1, 1 2} (mod turns-taken 2))]
         (-> state
             (update :wins tally-wins universes)
             (update :turns-taken inc)
-            (update :universes dirac-turn whose-turn))))))
+            (update :universes take-turn current-player))))))
 
 ;; (part-1 (init-state puzzle-input))
 ;; (part-2 (dirac-init-state puzzle-input))
