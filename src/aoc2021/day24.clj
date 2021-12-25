@@ -7,7 +7,7 @@
     (->> (line-seq rdr)
          (vec)
          (partition 18)       ;; Each block is 18 lines long
-         (apply map vector)   ;; Transpose -> Each row is now the nth line of each block
+         (apply map vector)   ;; Transpose -> Each row is now the nth line of all blocks
          (remove #(= (count (set %)) 1)) ;; Remove the lines that are the same for each block
          (apply map vector)   ;; Transpose -> Each row is now the important lines of each block
          (map (fn [block]     ;; Convert the numbers to integers.
