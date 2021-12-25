@@ -22,7 +22,7 @@
   "Given a z-value, an ALU program block represented by its three unique values
   a, b, and c, and an input value w, returns the resulting value z'."
   [z [a b c] w]
-  (let [x  (if (= w (+ (mod z 26) b)) 0 1)  ; x is 1 if w = z mod 26 + b else 0
+  (let [x  (if (= w (+ (mod z 26) b)) 0 1)  ; x is 0 if w = z mod 26 + b else 1
         y1 (inc (* 25 x))                   ; Z // A * (25x + 1) + x(w + c)
         y2 (* x (+ w c))]
     (+ y2 (quot (* z y1) a))))
