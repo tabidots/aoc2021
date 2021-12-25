@@ -5,7 +5,10 @@
 (comment
  "Day 7: The Treachery of Whales")
 
-;; TODO: Add docstrings
+(comment
+ "Originally solved via brute force (15s). Took solution from megathread and
+ runtime is now ~40ms using median, mean, and triangular numbers.")
+;; TODO: Add docstrings. Why does the mean/median produce the lowest cost?
 
 (def sample-input
   [16 1 2 0 4 2 7 1 2 14])
@@ -22,25 +25,51 @@
   [pos data]
   (apply + (map (partial diff pos) data)))
 
+(defn median
+  "Returns the median of a coll of numbers, without rounding."
+  [coll]
+  (let [items (count coll)]
+    (if (odd? items)
+      (nth (sort coll) (int (Math/ceil (/ items 2))))
+      (let [[head tail] (split-at (/ items 2) (sort coll))
+            lower       (last head)
+            higher      (first tail)]
+        (/ (+ lower higher)
+           2)))))
+
+(defn floor-ceil
+  [x]
+  [(int (Math/floor x)) (int (Math/ceil x))])
+
 (defn part-1
   [data]
-  (let [max-pos (apply max data)]
-    (apply min
-      (pmap #(cost-at-position % data) (range max-pos)))))
+  (->> (floor-ceil (median data))
+       (map #(cost-at-position % data))
+       (apply min)))
 
 (defn dynamic-diff
+  ;; TODO: Use triangular numbers here
   [a b]
-  (reduce + (range (inc (diff a b)))))
+  (let [n (diff a b)]
+    (/ (* n (inc n))
+       2)))
+  ;(reduce + (range (inc (diff a b)))))
 
 (defn dynamic-cost-at-position
   [pos data]
   (apply + (map (partial dynamic-diff pos) data)))
 
+(defn mean
+  "Returns the mean of a coll of numbers (without rounding)."
+  [coll]
+  (/ (apply + coll)
+     (count coll)))
+
 (defn part-2
   [data]
-  (let [max-pos (apply max data)]
-    (apply min
-      (pmap #(dynamic-cost-at-position % data) (range max-pos)))))
+  (->> (floor-ceil (mean data))
+       (map #(dynamic-cost-at-position % data))
+       (apply min)))
 
 (time
  (do
