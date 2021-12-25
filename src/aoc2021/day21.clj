@@ -1,6 +1,11 @@
 (ns aoc2021.day21
   (:require [clojure.java.io :as io]))
 
+(comment
+ "Day 21: Dirac Dice")
+
+;; TODO: Add docstrings/explanation
+
 (def sample-input
   (-> "../resources/day21_ex.txt" io/resource io/reader line-seq))
 
@@ -92,5 +97,8 @@
             (update :turns-taken inc)
             (update :universes take-turn current-player))))))
 
-;; (part-1 (init-state puzzle-input))
-;; (part-2 (dirac-init-state puzzle-input))
+(time
+ (do
+   (println "Day 21: Dirac Dice")
+   (println "[Part 1] Sample:" (part-1 (init-state sample-input)) "Puzzle:" (part-1 (init-state puzzle-input)))
+   (println "[Part 2] Sample:" (part-2 (dirac-init-state sample-input)) "Puzzle:" (part-2 (dirac-init-state puzzle-input)))))

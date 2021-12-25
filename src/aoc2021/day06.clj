@@ -2,6 +2,9 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as s]))
 
+(comment
+ "Day 6: Lanternfish")
+
 (def sample-input
   (->> (s/split "3,4,3,1,2" #",")
        (map read-string)
@@ -38,8 +41,12 @@
   [fishes]
   (reduce + (vals fishes)))
 
-(defn part-1 []
-  (total-fish (elapse puzzle-input 80)))
+(defn solve
+  [input days]
+  (total-fish (elapse input days)))
 
-(defn part-2 []
-  (total-fish (elapse puzzle-input 256)))
+(time
+ (do
+   (println "Day 6: Lanternfish")
+   (println "[Part 1] Sample:" (solve sample-input 80) "Puzzle:" (solve puzzle-input 80))
+   (println "[Part 2] Sample:" (solve sample-input 256) "Puzzle:" (solve puzzle-input 256))))

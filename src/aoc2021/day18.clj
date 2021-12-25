@@ -4,17 +4,15 @@
             [clojure.walk :as w]
             [clojure.math.combinatorics :as combo]))
 
+(comment
+ "Day 18: Snailfish")
+
 ;; This could probably be cleaned up, but I don't want to touch this problem
 ;; ever again. Ugh.
 
-(def example-1
-  (-> "../resources/day18_ex.txt" io/resource io/reader line-seq))
-
-(def example-2
-  (-> "../resources/day18_ex2.txt" io/resource io/reader line-seq))
-
-(def puzzle-input
-  (-> "../resources/day18.txt" io/resource io/reader line-seq))
+(def example-1 (-> "../resources/day18_ex.txt" io/resource io/reader line-seq))
+(def example-2 (-> "../resources/day18_ex2.txt" io/resource io/reader line-seq))
+(def puzzle-input (-> "../resources/day18.txt" io/resource io/reader line-seq))
 
 (defn zip-return
   [tree]
@@ -108,3 +106,9 @@
 (defn part-2
   [homework]
   (apply max (map part-1 (combo/permuted-combinations homework 2))))
+
+(time
+ (let [examples [example-1 example-2]]
+   (println "Day 18: Snailfish")
+   (println "[Part 1] Examples:" (map part-1 examples) "Puzzle:" (part-1 puzzle-input))
+   (println "[Part 2] Examples:" (map part-2 examples) "Puzzle:" (part-2 puzzle-input))))

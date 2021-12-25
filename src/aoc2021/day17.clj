@@ -1,6 +1,9 @@
 (ns aoc2021.day17
   (:require [clojure.java.io :as io]))
 
+(comment
+ "Day 17: Trick Shot")
+
 (defn parse
   [data]
   (let [[left right bottom top] (map read-string (re-seq #"-?\d+" data))]
@@ -55,3 +58,10 @@
          :let [result (fire-probe target xv yv)]
          :when result]
      {:max-y (:max-y result) :init-xv xv :init-yv yv})))
+
+(time
+ (let [[p1s p2s] (solve sample-input)
+       [p1p p2p] (solve puzzle-input)]
+   (println "Day 17: Trick Shot")
+   (println "[Part 1] Sample:" p1s "Puzzle:" p1p)
+   (println "[Part 2] Sample:" p2s "Puzzle:" p2p)))

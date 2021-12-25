@@ -1,6 +1,9 @@
 (ns aoc2021.day10
   (:require [clojure.java.io :as io]))
 
+(comment
+ "Day 10: Syntax Scoring")
+
 (def sample-input
   (-> "../resources/day10_ex.txt" io/resource io/reader line-seq))
 
@@ -56,3 +59,9 @@
   [data]
   (let [scores (ac-scores data)]
     (nth scores (/ (count scores) 2))))
+
+(time
+ (do
+   (println "Day 10: Syntax Scoring")
+   (println "[Part 1] Sample:" (part-1 sample-input) "Puzzle:" (part-1 puzzle-input))
+   (println "[Part 2] Sample:" (part-2 sample-input) "Puzzle:" (part-2 puzzle-input))))

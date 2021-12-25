@@ -1,6 +1,11 @@
 (ns aoc2021.day14
   (:require [clojure.java.io :as io]))
 
+(comment
+ "Day 14: Extended Polymerization")
+
+;; TODO: Add docstrings/explanation
+
 (defn parse
   [data]
   (let [polymer (->> (first data) (partition 2 1) (frequencies))]
@@ -32,3 +37,9 @@
                                (merge-with + res {(first pair) count}))
                              {} end-state)]
     (- (apply max (vals counts)) (apply min (vals counts)))))
+
+(time
+  (do
+    (println "Day 14: Extended Polymerization")
+    (println "[Part 1] Sample:" (solve sample-input 10) "Puzzle:" (solve puzzle-input 10))
+    (println "[Part 2] Sample:" (solve sample-input 40) "Puzzle:" (solve puzzle-input 40))))

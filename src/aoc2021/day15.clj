@@ -2,6 +2,9 @@
   (:require [clojure.java.io :as io]
             [clojure.data.priority-map :refer [priority-map-keyfn]]))
 
+(comment
+ "Day 15: Chiton")
+
 (defn parse
   [data]
   (vec (for [row data]
@@ -48,5 +51,8 @@
          (apply concat)
          vec)))
 
-; (solve puzzle-input)
-; (solve (expand puzzle-input))
+(time
+ (do
+   (println "Day 15: Chiton")
+   (println "[Part 1] Sample:" (solve sample-input) "Puzzle:" (solve puzzle-input))
+   (println "[Part 2] Sample:" (solve (expand sample-input)) "Puzzle:" (solve (expand puzzle-input)))))

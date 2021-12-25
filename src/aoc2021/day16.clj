@@ -3,6 +3,9 @@
             [clojure.string :as s]
             [clojure.pprint :as pp]))
 
+(comment
+ "Day 16: Packet Decoder")
+
 (def hex->bin*
   {\0 "0000" \1 "0001" \2 "0010" \3 "0011" \4 "0100" \5 "0101" \6 "0110"
    \7 "0111" \8 "1000" \9 "1001" \A "1010" \B "1011" \C "1100" \D "1101"
@@ -107,3 +110,9 @@
 (defn part-2
   [data]
   (:value (get-packets data)))
+
+(time
+ (do
+   (println "Day 16: Packet Decoder")
+   (println "[Part 1]" (part-1 puzzle-input))
+   (println "[Part 2]" (part-2 puzzle-input))))

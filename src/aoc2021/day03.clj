@@ -1,6 +1,11 @@
 (ns aoc2021.day03
   (:require [clojure.java.io :as io]))
-  
+
+(comment
+ "Day 3: Binary Diagnostic")
+
+;; TODO: Refactor this to make it DRY
+
 (def sample-input
   (-> "../resources/day03_ex.txt" io/resource io/reader line-seq))
 
@@ -75,3 +80,9 @@
   "Life support = Oxygen rating * CO2 scrubber rating"
   [data]
   (* (oxygen-rating data) (co2-rating data)))
+
+(time
+ (do
+   (println "Day 3: Binary Diagnostic")
+   (println "[Part 1] Sample:" (part-1 sample-input) "Puzzle:" (part-1 puzzle-input))
+   (println "[Part 2] Sample:" (part-2 sample-input) "Puzzle:" (part-2 puzzle-input))))

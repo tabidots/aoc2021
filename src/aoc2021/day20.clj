@@ -1,6 +1,9 @@
 (ns aoc2021.day20
   (:require [clojure.java.io :as io]))
 
+(comment
+ "Day 20: Trench Map")
+
 (defn parse
   [data]
   (let [lut {\# 1 \. 0}]
@@ -53,5 +56,8 @@
     (-> image flatten frequencies (get 1))
     (recur (enhance data) iterations)))
 
-;; (solve puzzle-input 2)
-;; (solve puzzle-input 50)
+(time
+ (do
+  (println "Day 20: Trench Map")
+  (println "[Part 1] Sample:" (solve sample-input 2) "Puzzle:" (solve puzzle-input 2))
+  (println "[Part 2] Sample:" (solve sample-input 50) "Puzzle:" (solve puzzle-input 50))))

@@ -1,6 +1,9 @@
 (ns aoc2021.day24
   (:require [clojure.java.io :as io]))
 
+(comment
+ "Day 24: Arithmetic Logic Unit")
+
 (def alu-steps
   "Extracts the three important values from each ALU instruction block."
   (with-open [rdr (io/reader (io/resource "../resources/day24.txt"))]
@@ -73,5 +76,8 @@
                   (recur steps (conj result w) z'))
                 (read-string (apply str result))))))))))
 
-(defn part-1 [] (solve max))
-(defn part-2 [] (solve min))
+(time
+ (do
+   (println "Day 24: Arithmetic Logic Unit")
+   (println "[Part 1]" (solve max))
+   (println "[Part 2]" (solve min))))

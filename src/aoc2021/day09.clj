@@ -1,6 +1,9 @@
 (ns aoc2021.day09
   (:require [clojure.java.io :as io]))
 
+(comment
+ "Day 9: Smoke Basin")
+
 (defn parse
   [data]
   (reduce into {}
@@ -50,3 +53,9 @@
        (sort >)
        (take 3)
        (reduce *)))
+
+(time
+ (do
+   (println "Day 9: Smoke Basin")
+   (println "[Part 1] Sample:" (part-1 sample-input) "Puzzle:" (part-1 puzzle-input))
+   (println "[Part 2] Sample:" (part-2 sample-input) "Puzzle:" (part-2 puzzle-input))))

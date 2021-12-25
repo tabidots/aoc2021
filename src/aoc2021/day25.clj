@@ -1,6 +1,9 @@
 (ns aoc2021.day25
   (:require [clojure.java.io :as io]))
 
+(comment
+ "Day 25: Sea Cucumber")
+
 (def lut
   {\v :south, \> :east})
 
@@ -70,3 +73,8 @@
   (->> (iterate step input)
        (take-while #(not (and (:east-frozen %) (:south-frozen %))))
        (count)))
+
+(time
+ (do
+  (println "Day 25: Sea Cucumber")
+  (println "[Part 1] Sample:" (part-1 sample-input) "Puzzle:" (part-1 puzzle-input))))

@@ -1,6 +1,9 @@
 (ns aoc2021.day22
   (:require [clojure.java.io :as io]))
 
+(comment
+ "Day 22: Reactor Reboot")
+
 (defn parse
   [data]
   (for [line data
@@ -85,9 +88,15 @@
           #{} instructions))
 
 (defn part-1
-  []
-  (apply + (map volume (reboot (filter :for-part-1? puzzle-input)))))
+  [data]
+  (apply + (map volume (reboot (filter :for-part-1? data)))))
 
 (defn part-2
-  []
-  (apply + (map volume (reboot puzzle-input))))
+  [data]
+  (apply + (map volume (reboot data))))
+
+(time
+ (do
+   (println "Day 22: Reactor Reboot")
+   (println "[Part 1]" (part-1 puzzle-input))
+   (println "[Part 2]" (part-2 puzzle-input))))

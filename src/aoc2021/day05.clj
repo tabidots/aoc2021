@@ -1,6 +1,9 @@
 (ns aoc2021.day05
   (:require [clojure.java.io :as io]))
 
+(comment
+ "Day 5: Hydrothermal Venture")
+
 (def sample-input
   (-> "../resources/day05_ex.txt" io/resource io/reader line-seq))
 
@@ -34,6 +37,8 @@
          (remove #(= (val %) 1))
          count)))
 
-(defn part-1 [] (find-overlaps puzzle-input))
-
-(defn part-2 [] (find-overlaps puzzle-input :diagonal? true))
+(time
+ (do
+   (println "Day 5: Hydrothermal Venture")
+   (println "[Part 1] Sample:" (find-overlaps sample-input) "Puzzle:" (find-overlaps puzzle-input))
+   (println "[Part 2] Sample:" (find-overlaps sample-input :diagonal? true) "Puzzle:" (find-overlaps puzzle-input :diagonal? true))))

@@ -3,6 +3,9 @@
             [clojure.string :as s]
             [clojure.set :as set]))
 
+(comment
+ "Day 8: Seven Segment Search")
+
 (defn parse
   [data]
   (for [line data]
@@ -66,3 +69,9 @@
              (map lut)
              s/join
              (Integer/parseInt))))))
+
+(time
+ (do
+   (println "Day 8: Seven Segment Search")
+   (println "[Part 1] Sample:" (part-1 sample-input) "Puzzle:" (part-1 puzzle-input))
+   (println "[Part 2] Sample:" (part-2 sample-input) "Puzzle:" (part-2 puzzle-input))))

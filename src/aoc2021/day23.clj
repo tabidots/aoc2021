@@ -2,6 +2,11 @@
   (:require [clojure.java.io :as io]
             [clojure.data.priority-map :refer [priority-map]]))
 
+(comment
+ "Day 23: Amphipod")
+
+;; TODO: Refactor maybe?
+
 (def cost       {:A 1 :B 10 :C 100 :D 1000})
 (def goal-rooms {:A 2 :B 4 :C 6 :D 8})
 ;; nil values denote where amphipods cannot land
@@ -31,7 +36,6 @@
 
 (def puzzle-2
   (-> "../resources/day23_p2.txt" io/resource io/reader slurp parse))
-
 
 (defn vacant?
   "Returns true if the given board position is empty."
@@ -162,5 +166,7 @@
   []
   (reset! board [hallway rooms rooms rooms rooms])
   (solve puzzle-2))
+
+(println "Day 23 solution takes too long. Skipping...")
 
 ;; Current runtime for each: A few minutes

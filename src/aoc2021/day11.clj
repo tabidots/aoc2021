@@ -1,6 +1,9 @@
 (ns aoc2021.day11
   (:require [clojure.java.io :as io]))
 
+(comment
+ "Day 11: Dumbo Octopus")
+
 (defn parse
   [data]
   {:flashes 0
@@ -67,3 +70,9 @@
        (drop-while #(not-every? zero? (vals (:grid %))))
        first
        :step))
+
+(time
+  (do
+    (println "Day 11: Dumbo Octopus")
+    (println "[Part 1] Sample:" (part-1 sample-input) ", Puzzle:" (part-1 puzzle-input))
+    (println "[Part 2] Sample:" (part-2 sample-input) ", Puzzle:" (part-2 puzzle-input))))

@@ -2,55 +2,29 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as s]))
 
-;; Set up the example
+(comment
+ "Day 4: Giant Squid")
 
-(def sample-calls
-  [7 4 9 5 11 17 23 2 0 14 21 24 10 16 13 6 15 25 12 22 18 20 8 19 3 26 1])
+(def sample-input
+  (-> "../resources/day04_ex.txt" io/resource io/reader line-seq))
 
-(def sample-boards
-  [[[22 13 17 11  0]
-    [ 8  2 23  4 24]
-    [21  9 14 16  7]
-    [ 6 10  3 18  5]
-    [ 1 12 20 15 19]]
-
-   [[ 3 15  0  2 22]
-    [ 9 18 13 17  5]
-    [19  8  7 25 23]
-    [20 11 10 24  4]
-    [14 21 16 12  6]]
-
-   [[14 21 17 24  4]
-    [10 16 15  9 19]
-    [18  8 23 26 20]
-    [22 11 13  6  5]
-    [ 2  0 12  3  7]]])
-
-(def sample-init-state
-  {:called   '() ;; These are lists so that "conj" prepends rather than appends
-   :winners  '()
-   :uncalled sample-calls
-   :boards   sample-boards})
-
-;; Parse the puzzle input
+(def puzzle-input
+  (-> "../resources/day04.txt" io/resource io/reader line-seq))
 
 (defn string->row
   [s]
   (let [split (-> s s/trim (s/split #"\s+"))]
     (mapv read-string split)))
 
-(defn parse-board
-  [raw-board]
-  (mapv string->row raw-board))
-
-(def init-state
-  (let [raw-input (-> "../resources/day04.txt" io/resource io/reader slurp (s/split #"\n"))
-        raw-calls (-> (first raw-input) (s/split  #","))
-        boards    (->> (drop 2 raw-input)
-                       (remove (partial = ""))
-                       (partition 5)
-                       (mapv parse-board))]
-    {:called   '()
+(defn init
+  [data]
+  (let [parse-board (fn [raw-board] (mapv string->row raw-board))
+        raw-calls   (-> (first data) (s/split  #","))
+        boards      (->> (drop 2 data)
+                         (remove empty?)
+                         (partition 5)
+                         (mapv parse-board))]
+    {:called   '() ; These are lists so that "conj" prepends rather than appends
      :winners  '()
      :uncalled (map read-string raw-calls)
      :boards   boards}))
@@ -99,8 +73,8 @@
                      :always    (assoc  :boards   remaining))
                    mode))))
 
-(defn part-1 []
-  (play-bingo init-state))
-
-(defn part-2 []
-  (play-bingo init-state :last-winner true))
+(time
+ (let [sample (init sample-input) puzzle (init puzzle-input)]
+   (println "Day 4: Giant Squid")
+   (println "[Part 1] Sample:" (play-bingo sample) "Puzzle:" (play-bingo puzzle))
+   (println "[Part 2] Sample:" (play-bingo sample :last-winner true) "Puzzle:" (play-bingo puzzle :last-winner true))))

@@ -1,6 +1,9 @@
 (ns aoc2021.day12
   (:require [clojure.java.io :as io]))
 
+(comment
+ "Day 12: Passage Pathing")
+
 (defn parse
   [data]
   (reduce (fn [res line]
@@ -53,4 +56,8 @@
        (filter #(= (last %) :end))
        count))
 
-(solve puzzle-input)
+(time
+  (let [samples [sample-1 sample-2 sample-3]]
+    (println "Day 12: Passage Pathing")
+    (println "[Part 1] Samples:" (map solve samples) ", Puzzle:" (solve puzzle-input))
+    (println "[Part 2] Samples:" (map #(solve % :single-twice? true) samples) ", Puzzle:" (solve puzzle-input :single-twice? true))))

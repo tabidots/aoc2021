@@ -2,6 +2,9 @@
   (:require [clojure.java.io :as io]
             [clojure.set :as s]))
 
+(comment
+ "Day 19: Beacon Scanner")
+
 (defn rotations
   [[x y z]]
   ;; 0          90º              180º          270º clockwise
@@ -82,7 +85,7 @@
 (defn solve
   [scanners]
   (let [[knowns unknowns] ((juxt filter-keys remove-keys) :position scanners)]
-    (println knowns unknowns)
+    ;(println knowns unknowns)
     (cond
       (empty? knowns)   (recur (assoc-in scanners [0 :position] [0 0 0]))
       (empty? unknowns) ((juxt part-1 part-2) scanners)
@@ -115,3 +118,12 @@
     (for [[a {p1 :position}] scanners
           [_ {p2 :position}] (dissoc scanners a)]
       (manhattan-distance p1 p2))))
+
+(println "Day 19 solution takes too long. Skipping...")
+
+(comment "This takes a few minutes."
+ (let [[p1s p2s] (solve sample-input)
+       [p1p p2p] (solve puzzle-input)]
+   (println "Day 19: Beacon Scanners")
+   (println "[Part 1] Sample:" p1s "Puzzle:" p1p)
+   (println "[Part 2] Sample:" p2s "Puzzle:" p2p)))
